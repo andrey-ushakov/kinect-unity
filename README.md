@@ -1,4 +1,6 @@
 # Projet Kinect
+ENSIIE / semestre 5 / Interactions Et Capteurs
+
 Le but de ce projet est de programmer des interactions gestuelles de différents types dans un jeu sous Unity, en utilisant la Kinect
 
 #### Menu de démarrage
