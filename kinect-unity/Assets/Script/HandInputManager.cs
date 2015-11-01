@@ -81,7 +81,7 @@ public class HandInputManager : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        sw = SkeletonWrapper.Instance;
+        //sw = SkeletonWrapper.Instance;
     }
 
     // Update is called once per frame

@@ -19,8 +19,8 @@ public class GlobalVariables : MonoBehaviour
     public static GameObject GO_BIRD;
     public GameObject go_bird;
 
-    public static BirdsFactory GO_BIRDS_FACTORY;
-    public BirdsFactory go_birdsFactory;
+    //public static BirdsFactory GO_BIRDS_FACTORY;
+    //public BirdsFactory go_birdsFactory;
 
     public static int I_DEPTH_PRODUCE_BIRD;
     public int i_depthProduceBird;
@@ -43,7 +43,7 @@ public class GlobalVariables : MonoBehaviour
 
         GO_BIRD = go_bird;
 
-        GO_BIRDS_FACTORY = go_birdsFactory;
+        //GO_BIRDS_FACTORY = go_birdsFactory;
 
         I_DEPTH_PRODUCE_BIRD = i_depthProduceBird;
 
