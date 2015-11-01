@@ -31,7 +31,23 @@ public class SkeletonWrapper : MonoBehaviour {
 	
 	private Matrix4x4 kinectToWorld;
 	public Matrix4x4 flipMatrix;
-	
+
+    private static SkeletonWrapper _instance;
+
+    public static SkeletonWrapper Instance
+    {
+        get
+        {
+            _instance = FindObjectOfType(typeof(SkeletonWrapper)) as SkeletonWrapper;
+            if (_instance == null)
+            {
+                _instance = GameObject.Instantiate(GlobalVariables.GO_KINECT_PREFAB) as SkeletonWrapper;
+            }
+
+            return _instance;
+        }
+    }
+
 	// Use this for initialization
 	void Start () {
 		kinect = devOrEmu.getKinect();
