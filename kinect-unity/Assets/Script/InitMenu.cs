@@ -4,14 +4,14 @@ using System.Collections;
 public class InitMenu : MonoBehaviour
 {
 
-    //public HandInputManager him = null;
+    public HandInputManager him = null;
 
     private float f_weightButtonGUI = 0f;
     private float f_heightButtonGUI = 0f;
     private Color color_buttonHeadTracking = Color.black;
     private Color color_buttonStartGame = Color.black;
     private Color color_quitGame = Color.black;
-   // private AudioManager audioManager;
+    private AudioManager audioManager;
 
     // Use this for initialization
     void Start()
@@ -21,11 +21,12 @@ public class InitMenu : MonoBehaviour
         f_heightButtonGUI = Screen.height * 0.125f;
 
         // listen right hand position detected event
-        //him.rightHandPositionDetected += new RightHandPositionDetectedEventHandler(onRightHandPositionDetected);
+        him = HandInputManager.Instance;
+        him.rightHandPositionDetected += new RightHandPositionDetectedEventHandler(onRightHandPositionDetected);
 
-        //audioManager = AudioManager.Instance;
+        audioManager = AudioManager.Instance;
     }
-    /*
+    
     void onRightHandPositionDetected(object sender, RightHandPositionDetectedEventArgs e)
     {
         switch (e.pos)
@@ -33,23 +34,23 @@ public class InitMenu : MonoBehaviour
             case RightHandPosition.UP:
                 color_buttonHeadTracking = Color.green;
                 Application.LoadLevel("HeadTracking");
-                //Debug.Log("UP detected");
+                Debug.Log("UP detected");
                 break;
             case RightHandPosition.MID:
                 color_buttonStartGame = Color.green;
                 Application.LoadLevel("Game");
-                //Debug.Log("MID detected");
+                Debug.Log("MID detected");
                 break;
             case RightHandPosition.DOWN:
                 color_quitGame = Color.green;
                 Application.Quit();
-                //Debug.Log("DOWN detected");
+                Debug.Log("DOWN detected");
                 break;
             default:
                 break;
         }
     }
-    */
+    
     // Update is called once per frame
     void Update()
     {
