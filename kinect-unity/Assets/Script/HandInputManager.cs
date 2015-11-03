@@ -21,7 +21,7 @@ public delegate void HandMotionDetectedEventHandler(object sender, HandMotionDet
 
 public class HandInputManager : MonoBehaviour {
 
-    public event HandMotionDetectedEventHandler handMotionDetected;
+    public static event HandMotionDetectedEventHandler handMotionDetected;
 
     private SkeletonWrapper sw;
     private int PlayerId = 0;
