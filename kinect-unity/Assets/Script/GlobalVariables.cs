@@ -5,17 +5,20 @@ public class GlobalVariables : MonoBehaviour
 {
 
     public static SkeletonWrapper GO_KINECT_PREFAB;
-    public SkeletonWrapper go_KinectPrefab;
+    public SkeletonWrapper kinectPrefab;
 
+    public static HandInputManager GO_HAND_INPUT_MANAGER;
+    public HandInputManager handInputManager;
 
     void Awake()
     {
-        GO_KINECT_PREFAB = go_KinectPrefab;
-
+        GO_KINECT_PREFAB = kinectPrefab;
+        GO_HAND_INPUT_MANAGER = handInputManager;
     }
     // Use this for initialization
     void Start()
     {
+        Debug.Log("GLOBLE");
     }
 }
 
