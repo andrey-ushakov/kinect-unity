@@ -7,9 +7,9 @@ public class HeadTracking : MonoBehaviour {
 	private SkeletonWrapper sw;
     private HandInputManager him;
     private int PlayerId = 0;
-    public Vector3 Origin = new Vector3(-4,3,12);
 
     private Vector3 headPos;
+    private Vector3 preHeadPos;
 
     void OnEnable() {
         HandInputManager.handMotionDetected += GoBackToMenu;
@@ -27,12 +27,15 @@ public class HeadTracking : MonoBehaviour {
 
 
 	void Start () {
-
+        this.headPos = Vector3.zero;
+        this.preHeadPos = Vector3.zero;
 	}
 	
 	void Update () {
         this.headPos = sw.bonePos[PlayerId, 3];
-        Camera.main.transform.position = this.headPos + Origin;
+        Vector3 headVelo = this.headPos - this.preHeadPos;
+        Camera.main.transform.position += headVelo;
+        this.preHeadPos = this.headPos;
     }
 
     void GoBackToMenu(object sender, HandMotionDetectedEventArgs args) {
