@@ -79,6 +79,7 @@ public class HandInputManager : MonoBehaviour {
             // get left hand velocity
             this.leftHandVelo = leftHandPos - leftHandPosPre;
             // right hand motion detection
+
             if (this.rightHandVelo.x > accuracy && Math.Abs(this.rightHandVelo.x) > Math.Abs(this.rightHandVelo.y))
             {
                 if (currentRightHandMotion != HandMotion.RIGHT_HAND_WAVE_OUT)
@@ -129,7 +130,8 @@ public class HandInputManager : MonoBehaviour {
             // validation of hand motion
             bool rightHandRiseValide = false;
             bool leftHandRiseValide = false;
-            // right
+
+
             if (currentRightHandMotion == HandMotion.RIGHT_HAND_WAVE_OUT
                 && currentTime - motionRightHandStartTime <= detectMotionDuration
                 && rightHandPos.x - motionStartRightHandPos.x >= detectMotionDistance)
@@ -189,7 +191,6 @@ public class HandInputManager : MonoBehaviour {
         {
             HandMotionDetectedEventArgs e = new HandMotionDetectedEventArgs();
             e.motion = motion;
-            Debug.Log(e.motion);
             handMotionDetected(this, e);
         }
     }
