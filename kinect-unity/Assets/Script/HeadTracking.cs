@@ -40,8 +40,7 @@ public class HeadTracking : MonoBehaviour {
 
     void GoBackToMenu(object sender, HandMotionDetectedEventArgs args) {
         if (args.motion == HandMotion.TWO_HAND_RISE) {
-            //TODO: Change the code here, implement going back to menu function
-            Debug.Log("GO BACK TO MENU");
+			Application.LoadLevel("MainMenu");
         }
     }
 

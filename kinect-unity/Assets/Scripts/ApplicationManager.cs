@@ -2,7 +2,6 @@
 using System.Collections;
 
 public class ApplicationManager : MonoBehaviour {
-	
 
 	public void Quit () {
 		#if UNITY_EDITOR
@@ -13,11 +12,10 @@ public class ApplicationManager : MonoBehaviour {
 	}
 
 	public void OnHeadTrackingClicked() {
-		Debug.Log ("Act1");
-		Application.LoadLevel("action1");
+		Application.LoadLevel("HeadTracking");
 	}
 
 	public void OnGameClicked() {
-		Debug.Log ("Act2");
+		Application.LoadLevel("Game");
 	}
 }
