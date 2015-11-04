@@ -27,8 +27,8 @@ public class HeadTracking : MonoBehaviour {
 
 
 	void Start () {
-        this.headPos = Vector3.zero;
-        this.preHeadPos = Vector3.zero;
+        this.headPos = sw.bonePos[PlayerId, 3];
+        this.preHeadPos = this.headPos;
 	}
 	
 	void Update () {
@@ -40,6 +40,7 @@ public class HeadTracking : MonoBehaviour {
 
     void GoBackToMenu(object sender, HandMotionDetectedEventArgs args) {
         if (args.motion == HandMotion.TWO_HAND_RISE) {
+            //TODO: Change the code here, implement going back to menu function
             Debug.Log("GO BACK TO MENU");
         }
     }

@@ -18,7 +18,6 @@ public class GlobalVariables : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        Debug.Log("GLOBLE");
     }
 }
 
