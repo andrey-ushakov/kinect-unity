@@ -133,7 +133,7 @@ public class TargetsFactory : MonoBehaviour {
 	}
 
 
-	public static void ReleaseAllTargetsByType(TargetType targetType) {
+	public static int ReleaseAllTargetsByType(TargetType targetType) {
 		int score = 0;
 		GameObject[] gameObjectsToRelease = GameObject.FindGameObjectsWithTag (targetType.ToString());
 
