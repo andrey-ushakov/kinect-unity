@@ -19,7 +19,7 @@ public class MouseManager : MonoBehaviour {
 	
 	void OnGUI()
 	{
-		GUI.DrawTexture(new Rect(mouse.x - (w / 2), mouse.y - (h / 2), w, h), cursor);
+		GUI.DrawTexture(new Rect(mouse.x, mouse.y, w, h), cursor);
 	}
 
 }
