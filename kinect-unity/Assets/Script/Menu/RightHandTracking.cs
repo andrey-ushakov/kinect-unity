@@ -60,7 +60,7 @@ public class RightHandTracking : MonoBehaviour {
     
     // Use this for initialization
 	void Start () {
-        this.rightHandPos = sw.bonePos[PlayerID, 11];
+        //this.rightHandPos = sw.bonePos[PlayerID, 11];
         this.preRightHandPos = this.rightHandPos;
         GetCursorPos(out mousePos);
 	}
