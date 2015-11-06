@@ -7,6 +7,10 @@ public class TargetsFactory : MonoBehaviour {
 	private Dictionary<TargetType, Queue<Target>> availableTargetsByType = new Dictionary<TargetType, Queue<Target>>();
 
 	private int targetCount = 0;
+	
+	[SerializeField]
+	private float setSpeed = 7f;
+	private static float speed = 7f;
 
 	[SerializeField]
 	private GameObject targetPrefab;
@@ -24,6 +28,8 @@ public class TargetsFactory : MonoBehaviour {
 
 
 	private void Awake() {
+		speed = setSpeed;
+
 		if (Instance != null) {
 			Debug.LogError("There is multiple instance of singleton TargetsFactory");
 			return;
@@ -76,15 +82,15 @@ public class TargetsFactory : MonoBehaviour {
 
 		switch (targetType) {
 		case TargetType.TopTarget:
-			target.Direction = new Vector3(0, 3, -7);
+			target.Direction = new Vector3(0, 3, -speed);
 			break;
 			
 		case TargetType.LeftTarget:
-			target.Direction = new Vector3(-6, 0, -7);
+			target.Direction = new Vector3(-6, 0, -speed);
 			break;
 			
 		case TargetType.RightTarget:
-			target.Direction = new Vector3(6, 0, -7);
+			target.Direction = new Vector3(6, 0, -speed);
 			break;
 		}
 
