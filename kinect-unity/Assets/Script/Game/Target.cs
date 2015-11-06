@@ -1,11 +1,17 @@
 ﻿using UnityEngine;
+using System;
 using System.Collections;
+
+public delegate void TargetPlayerCollisionHandler(object sender, EventArgs e);
 
 public class Target : MonoBehaviour {
 
 	private TargetType type;
 	private Vector3 direction;
 	private int score;
+	private float damage;
+
+	public static event TargetPlayerCollisionHandler targetPlayerCollision;
 
 	
 	public TargetType Type {
@@ -30,8 +36,17 @@ public class Target : MonoBehaviour {
 		get {
 			return this.score;
 		}
-		private set {
+		set {
 			this.score = value;
+		}
+	}
+
+	public float Damage {
+		get {
+			return this.damage;
+		}
+		set {
+			this.damage = value;
 		}
 	}
 
@@ -39,7 +54,6 @@ public class Target : MonoBehaviour {
 		get {
 			return this.transform.position;
 		}
-		
 		set {
 			this.transform.position = value;
 		}
@@ -47,15 +61,21 @@ public class Target : MonoBehaviour {
 
 	private void Awake() {
 		this.direction = new Vector3 (0, 0, 0);
-		this.score = 3;
+		this.score = 0;
+		this.damage = 0f;
 	}
 
 	private void Update() {
 		this.UpdatePosition();
 		
 		// release target if it is in collision with player
-		if (this.Position.z < -10) {
+		if (this.Position.z < -5) {
 			TargetsFactory.ReleaseTarget(this);
+
+			// player collision event
+			if (targetPlayerCollision != null) {
+				targetPlayerCollision(this, EventArgs.Empty);
+			}
 		}
 	}
 

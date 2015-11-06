@@ -48,8 +48,7 @@ public class RightHandTracking : MonoBehaviour {
         HandInputManager.handMotionDetected += SelectMenu;
     }
 
-    void OnDisable()
-    {
+    void OnDisable() {
         HandInputManager.handMotionDetected -= SelectMenu;
     }
 

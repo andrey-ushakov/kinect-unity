@@ -78,7 +78,9 @@ public class TargetsFactory : MonoBehaviour {
 		gameObject.transform.parent = TargetsFactory.Instance.gameObject.transform;
 		Target target = gameObject.GetComponent<Target>();
 
-		target.Type = targetType;
+		target.Type		= targetType;
+		target.Score 	= GameManager.TargetScore;
+		target.Damage 	= GameManager.TargetDamage;
 
 		switch (targetType) {
 		case TargetType.TopTarget:
