@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 public class TargetsFactory : MonoBehaviour {
 
-	private Dictionary<TargetType, Queue<Target>> availableTargetsByType = new Dictionary<TargetType, Queue<Target>>();
+	public Dictionary<TargetType, Queue<Target>> availableTargetsByType = new Dictionary<TargetType, Queue<Target>>();
 
 	private int targetCount = 0;
 	
@@ -75,6 +75,7 @@ public class TargetsFactory : MonoBehaviour {
 		gameObject = (GameObject) GameObject.Instantiate(Instance.targetPrefab);
 		
 		gameObject.SetActive(false);
+		gameObject.tag = targetType.ToString();
 		gameObject.transform.parent = TargetsFactory.Instance.gameObject.transform;
 		Target target = gameObject.GetComponent<Target>();
 
@@ -84,15 +85,15 @@ public class TargetsFactory : MonoBehaviour {
 
 		switch (targetType) {
 		case TargetType.TopTarget:
-			target.Direction = new Vector3(0, 3, -speed);
+			target.Direction = new Vector3(0, 3, -7) * speed;
 			break;
 			
 		case TargetType.LeftTarget:
-			target.Direction = new Vector3(-6, 0, -speed);
+			target.Direction = new Vector3(-6, 0, -7) * speed;
 			break;
 			
 		case TargetType.RightTarget:
-			target.Direction = new Vector3(6, 0, -speed);
+			target.Direction = new Vector3(6, 0, -7) * speed;
 			break;
 		}
 
@@ -112,7 +113,7 @@ public class TargetsFactory : MonoBehaviour {
 		if (target == null) {
 			// Instantiate a new target.
 			target = InstantiateTarget(targetType);
-			Debug.Log("Number of targets instantiated = " + TargetsFactory.Instance.targetCount + "\n" + targetType.ToString());
+			//Debug.Log("Number of targets instantiated = " + TargetsFactory.Instance.targetCount + "\n" + targetType.ToString());
 		}
 
 
@@ -122,10 +123,29 @@ public class TargetsFactory : MonoBehaviour {
 		return target;
 	}
 
+
 	public static void ReleaseTarget(Target target) {
 		Queue<Target> availableTargets = TargetsFactory.Instance.availableTargetsByType[target.Type];
 		target.gameObject.SetActive(false);
 		availableTargets.Enqueue(target);
+
+		Debug.Log (availableTargets.Count);
+	}
+
+
+	public static void ReleaseAllTargetsByType(TargetType targetType) {
+		int score = 0;
+		GameObject[] gameObjectsToRelease = GameObject.FindGameObjectsWithTag (targetType.ToString());
+
+		foreach(GameObject gameObject in gameObjectsToRelease) {
+			// add score
+			Target target = gameObject.GetComponent<Target>();
+			score += target.Score;
+			// release
+			TargetsFactory.ReleaseTarget(target);
+		}
+
+		return score;
 	}
 
 

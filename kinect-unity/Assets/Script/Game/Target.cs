@@ -69,7 +69,7 @@ public class Target : MonoBehaviour {
 		this.UpdatePosition();
 		
 		// release target if it is in collision with player
-		if (this.Position.z < -5) {
+		if (this.Position.z < -5 || this.Position.x < -13 || this.Position.x > 13) {
 			TargetsFactory.ReleaseTarget(this);
 
 			// player collision event

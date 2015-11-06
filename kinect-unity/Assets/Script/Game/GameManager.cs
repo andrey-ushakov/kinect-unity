@@ -37,6 +37,8 @@ public class GameManager : MonoBehaviour {
 
 	public static float TargetDamage;
 
+
+
 	private void Awake() {
 		if (Instance != null) {
 			Debug.LogError("There is multiple instance of singleton GameManager");
@@ -93,10 +95,12 @@ public class GameManager : MonoBehaviour {
 
 	void OnEnable() {
 		Target.targetPlayerCollision += OnTargetPlayerCollision;
+		HandInputManager.handMotionDetected += OnHandMotion;
 	}
 	
 	void OnDisable() {
 		Target.targetPlayerCollision -= OnTargetPlayerCollision;
+		HandInputManager.handMotionDetected -= OnHandMotion;
 	}
 
 	void OnTargetPlayerCollision(object sender, EventArgs e) {
@@ -108,5 +112,23 @@ public class GameManager : MonoBehaviour {
 				// TODO end game
 			}
 		}
+	}
+
+	void OnHandMotion(object sender, HandMotionDetectedEventArgs args) {
+		int deltaScore = 0;
+
+		switch(args.motion) {
+			case HandMotion.LEFT_HAND_WAVE_OUT:
+				deltaScore = TargetsFactory.ReleaseAllTargetsByType(TargetType.LeftTarget);
+				break;
+			case HandMotion.RIGHT_HAND_WAVE_OUT:
+				deltaScore = TargetsFactory.ReleaseAllTargetsByType(TargetType.RightTarget);
+				break;
+			case HandMotion.TWO_HAND_RISE:
+				deltaScore = TargetsFactory.ReleaseAllTargetsByType(TargetType.TopTarget);
+				break;
+		}
+
+		this.score += deltaScore;
 	}
 }
