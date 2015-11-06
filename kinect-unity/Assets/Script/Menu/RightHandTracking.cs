@@ -35,7 +35,8 @@ public class RightHandTracking : MonoBehaviour {
     private Vector3 rightHandPos;
     private Vector3 preRightHandPos;
 
-    public int scale = 2000;
+    public int scaleX = 4000;
+    public int scaleY = 2000;
 
     [DllImport("user32.dll")]
     public static extern bool SetCursorPos(int X, int Y);
@@ -59,24 +60,17 @@ public class RightHandTracking : MonoBehaviour {
     
     // Use this for initialization
 	void Start () {
-		if (sw.pollSkeleton ()) {
-			this.rightHandPos = sw.bonePos[PlayerID, 11];
-			this.preRightHandPos = this.rightHandPos;
-			GetCursorPos(out mousePos);
-		} else {
-			System.Threading.Thread.Sleep(1000);
-		}
 	}
 	
 	// Update is called once per frame
 	void Update () {
 		if (sw.pollSkeleton()){
 			this.rightHandPos = sw.bonePos[PlayerID, 11];
-			int dx = (int)((this.rightHandPos.x - this.preRightHandPos.x)*scale);
-			int dy = (int)((this.rightHandPos.z - this.preRightHandPos.z)*scale);
+			int dx = (int)((this.rightHandPos.x - this.preRightHandPos.x)*scaleX);
+			int dy = (int)((this.rightHandPos.y - this.preRightHandPos.y)*scaleY);
 			GetCursorPos(out mousePos);
 			mousePos.X += dx;
-			mousePos.Y += dy;
+			mousePos.Y -= dy;
 			SetCursorPos(mousePos.X, mousePos.Y);
 			this.preRightHandPos = this.rightHandPos;
 		}     
