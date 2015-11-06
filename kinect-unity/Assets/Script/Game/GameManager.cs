@@ -8,7 +8,9 @@ public class GameManager : MonoBehaviour {
 	private GameMode gameMode = GameMode.LimitedTime;
 
 	[SerializeField]
-	private float time = 10f;
+	private float timeLeft = 10f;
+
+	private float timeCounter = 0;
 	
 	[SerializeField]
 	private float targetDamage = 2f;
@@ -54,12 +56,16 @@ public class GameManager : MonoBehaviour {
 	void Update () {
 		RandomSpawn ();
 
-		if(gameMode == GameMode.LimitedTime) {
-			time -= Time.deltaTime;
-
-			if (time <= 0) {
-				// TODO end game
-			}
+		switch(gameMode) {
+			case GameMode.LimitedTime:
+				timeLeft -= Time.deltaTime;
+				if (timeLeft <= 0) {
+					// TODO end game
+				}
+				break;
+			case GameMode.LimitedLife:
+				timeCounter += Time.deltaTime;
+				break;
 		}
 	}
 
@@ -94,9 +100,10 @@ public class GameManager : MonoBehaviour {
 	}
 
 	void OnTargetPlayerCollision(object sender, EventArgs e) {
+		Target target = sender as Target;
 
 		if (gameMode == GameMode.LimitedLife) {
-			life -= 1f;
+			life -= target.Damage;
 			if (life <= 0) {
 				// TODO end game
 			}
