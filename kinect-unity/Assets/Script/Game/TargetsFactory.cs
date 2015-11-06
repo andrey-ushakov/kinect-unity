@@ -66,26 +66,28 @@ public class TargetsFactory : MonoBehaviour {
 	private static Target InstantiateTarget(TargetType targetType) {
 		GameObject gameObject = null;
 		
-		//gameObject = (GameObject) GameObject.Instantiate(Instance.targetPrefab);
+		gameObject = (GameObject) GameObject.Instantiate(Instance.targetPrefab);
+		
+		gameObject.SetActive(false);
+		gameObject.transform.parent = TargetsFactory.Instance.gameObject.transform;
+		Target target = gameObject.GetComponent<Target>();
 
-		// TODO set direction
+		target.Type = targetType;
+
 		switch (targetType) {
 		case TargetType.TopTarget:
-			gameObject = (GameObject) GameObject.Instantiate(Instance.targetPrefab);
+			target.Direction = new Vector3(0, 3, -7);
 			break;
 			
 		case TargetType.LeftTarget:
-			gameObject = (GameObject) GameObject.Instantiate(Instance.targetPrefab);
+			target.Direction = new Vector3(-6, 0, -7);
 			break;
 			
 		case TargetType.RightTarget:
-			gameObject = (GameObject) GameObject.Instantiate(Instance.targetPrefab);
+			target.Direction = new Vector3(6, 0, -7);
 			break;
 		}
-		
-		gameObject.SetActive(false);
-		gameObject.transform.parent = TargetsFactory.Instance.gameObject.transform;	// TODO
-		Target target = gameObject.GetComponent<Target>();
+
 		TargetsFactory.Instance.targetCount++;
 		return target;
 	}
@@ -105,23 +107,8 @@ public class TargetsFactory : MonoBehaviour {
 			Debug.Log("Number of targets instantiated = " + TargetsFactory.Instance.targetCount + "\n" + targetType.ToString());
 		}
 
-		Vector3 position = new Vector3 (0, 0, 0);
 
-		switch (targetType) {
-		case TargetType.TopTarget:
-			position = new Vector3 (0, 4, 0);
-			break;
-			
-		case TargetType.LeftTarget:
-			position = new Vector3 (-17, 0, 0);
-			break;
-			
-		case TargetType.RightTarget:
-			position = new Vector3 (17, 0, 0);
-			break;
-		}
-
-		target.Position = position;
+		target.Position = new Vector3 (0, 0, 10);
 		target.gameObject.SetActive(true);
 		
 		return target;

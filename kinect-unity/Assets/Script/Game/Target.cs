@@ -4,7 +4,7 @@ using System.Collections;
 public class Target : MonoBehaviour {
 
 	private TargetType type;
-	private Vector3 speed;
+	private Vector3 direction;
 	private int score;
 
 	
@@ -12,19 +12,17 @@ public class Target : MonoBehaviour {
 		get {
 			return this.type;
 		}
-		
-		private set {
+		set {
 			this.type = value;
 		}
 	}
 
-	public Vector3 Speed {
+	public Vector3 Direction {
 		get {
-			return this.speed;
+			return this.direction;
 		}
-
-		private set {
-			this.speed = speed;
+		set {
+			this.direction = value;
 		}
 	}
 
@@ -32,7 +30,6 @@ public class Target : MonoBehaviour {
 		get {
 			return this.score;
 		}
-		
 		private set {
 			this.score = value;
 		}
@@ -49,21 +46,20 @@ public class Target : MonoBehaviour {
 	}
 
 	private void Awake() {
-		this.speed = new Vector3 (0, 0, 0);
+		this.direction = new Vector3 (0, 0, 0);
 		this.score = 3;
 	}
 
 	private void Update() {
 		this.UpdatePosition();
 		
-		// TODO release bullet if it is in collision with player
-		/*if (this.Position.x > 20 || this.Position.x < -20 || this.Position.y > 20 || this.Position.y < -20)
-		{
-			BulletsFactory.ReleaseBullet(this);
-		}*/
+		// release target if it is in collision with player
+		if (this.Position.z < -10) {
+			TargetsFactory.ReleaseTarget(this);
+		}
 	}
 
 	private void UpdatePosition() {
-		this.Position += this.speed * Time.deltaTime;
+		this.Position += (this.direction) * Time.deltaTime;
 	}
 }

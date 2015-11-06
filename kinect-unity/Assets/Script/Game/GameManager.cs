@@ -44,22 +44,12 @@ public class GameManager : MonoBehaviour {
 			return;
 		}
 
-		// TODO chose random target type
-		//float randomY = Random.Range(-4f, 4f);
-		//TargetsFactory.GetTarget(new Vector3(0,0,0), Quaternion.Euler(0f, 0f, 180f), prefabPath);
-
+		// chose random target type
 		System.Array values = TargetType.GetValues(typeof(TargetType));
 		TargetType targetType = (TargetType)values.GetValue(Random.Range(0, values.Length));
 
 		Target target = TargetsFactory.GetTarget(targetType);
-		//target.Initialize(direction, this.BulletSpeed, this.BulletDamage);
-
-		//Debug.Log ("SPAWN !");
-		/*Instantiate(target.transform,
-		            target.Position,
-		            Quaternion.identity);*/
 
 		this.lastTargetSpawnTime = Time.time;
-		
 	}
 }
