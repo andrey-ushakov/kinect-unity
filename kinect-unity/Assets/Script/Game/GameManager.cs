@@ -36,6 +36,38 @@ public class GameManager : MonoBehaviour {
 	[SerializeField]
 	private Text lifesText;
 
+	[SerializeField]
+	public Texture textureRightHandUp;
+
+
+
+	public int Score {
+		get {
+			return this.score;
+		}
+		private set {
+			this.score = value;
+		}
+	}
+
+	public float TimePassed {
+		get {
+			return this.timeCounter;
+		}
+		private set {
+			this.timeCounter = value;
+		}
+	}
+
+	public GameMode GetGameMode {
+		get {
+			return this.gameMode;
+		}
+		private set {
+			this.gameMode = value;
+		}
+	}
+
 
 	[SerializeField]
 	private float rateOfTargetSpawn = 0.2f;
@@ -50,6 +82,8 @@ public class GameManager : MonoBehaviour {
 	public static int TargetScore;
 
 	public static int TargetDamage;
+
+	private bool isFinished = false;
 
 
 
@@ -97,6 +131,10 @@ public class GameManager : MonoBehaviour {
 	}
 	
 	void Update () {
+		if (isFinished) {
+			return;
+		}
+
 		RandomSpawn ();
 
 		switch(gameMode) {
@@ -105,7 +143,7 @@ public class GameManager : MonoBehaviour {
 			UpdateTimeLeftText();
 			if (timeLeft <= 0) {
 				timeLeft = 0;
-				// TODO end game
+				showFinishScreen();
 			}
 			break;
 		case GameMode.LimitedLife:
@@ -155,10 +193,11 @@ public class GameManager : MonoBehaviour {
 			UpdateLifesText ();
 			if (life <= 0) {
 				life = 0;
-				// TODO end game
+				showFinishScreen();
 			}
 		}
 	}
+
 
 	void OnHandMotion(object sender, HandMotionDetectedEventArgs args) {
 		if(gameMode != GameMode.LimitedTime) {
@@ -168,15 +207,20 @@ public class GameManager : MonoBehaviour {
 		int deltaScore = 0;
 
 		switch(args.motion) {
-			case HandMotion.LEFT_HAND_WAVE_OUT:
-				deltaScore = TargetsFactory.ReleaseAllTargetsByType(TargetType.LeftTarget);
-				break;
-			case HandMotion.RIGHT_HAND_WAVE_OUT:
-				deltaScore = TargetsFactory.ReleaseAllTargetsByType(TargetType.RightTarget);
-				break;
-			case HandMotion.TWO_HAND_RISE:
-				deltaScore = TargetsFactory.ReleaseAllTargetsByType(TargetType.TopTarget);
-				break;
+		case HandMotion.LEFT_HAND_WAVE_OUT:
+			deltaScore = TargetsFactory.ReleaseAllTargetsByType(TargetType.LeftTarget);
+			break;
+		case HandMotion.RIGHT_HAND_WAVE_OUT:
+			deltaScore = TargetsFactory.ReleaseAllTargetsByType(TargetType.RightTarget);
+			break;
+		case HandMotion.TWO_HAND_RISE:
+			deltaScore = TargetsFactory.ReleaseAllTargetsByType(TargetType.TopTarget);
+			break;
+		case HandMotion.RIGHT_HAND_RISE:
+			if(isFinished) {
+				Application.LoadLevel("MainMenu");
+			}
+			break;
 		}
 
 		this.score += deltaScore;
@@ -198,5 +242,24 @@ public class GameManager : MonoBehaviour {
 	
 	void UpdateLifesText() {
 		lifesText.text = "Lifes: " + life.ToString ();
+	}
+
+
+	void showFinishScreen() {
+		// stop spawn objects and clear scene
+		isFinished = true;
+		TargetsFactory.ReleaseAllTargets ();
+
+		// hide texts
+		scoreText.gameObject.SetActive(false);
+		timeLeftText.gameObject.SetActive(false);
+		timePassedText.gameObject.SetActive(false);
+		lifesText.gameObject.SetActive(false);
+
+		// show final dialog
+		if (gameObject.GetComponent<FinalDialog> () == null) {
+			Debug.Log("FINAL DIALOG");
+			gameObject.AddComponent<FinalDialog> ();
+		}
 	}
 }

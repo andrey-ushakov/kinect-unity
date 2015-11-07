@@ -145,5 +145,11 @@ public class TargetsFactory : MonoBehaviour {
 		return score;
 	}
 
+	public static void ReleaseAllTargets() {
+		ReleaseAllTargetsByType(TargetType.TopTarget);
+		ReleaseAllTargetsByType(TargetType.LeftTarget);
+		ReleaseAllTargetsByType(TargetType.RightTarget);
+	}
+
 
 }
