@@ -223,7 +223,7 @@ public class GameManager : MonoBehaviour {
 			break;
 		}
 
-        if (gameMode != GameMode.LimitedTime) {
+        if (gameMode == GameMode.LimitedTime) {
             this.score += deltaScore;
             UpdateScoreText();
         }
