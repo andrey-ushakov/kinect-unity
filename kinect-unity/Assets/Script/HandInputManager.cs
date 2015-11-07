@@ -148,6 +148,7 @@ public class HandInputManager : MonoBehaviour {
                     && rightHandPos.y - motionStartRightHandPos.y >= detectMotionDistance)
             {
                 rightHandRiseValide = true;
+				OnHandMotionDetected(HandMotion.RIGHT_HAND_RISE);
             }
             // left
             if (currentLeftHandMotion == HandMotion.LEFT_HAND_WAVE_OUT
@@ -166,6 +167,7 @@ public class HandInputManager : MonoBehaviour {
                     && leftHandPos.y - motionStartLeftHandPos.y >= detectMotionDistance)
             {
                 leftHandRiseValide = true;
+				OnHandMotionDetected(HandMotion.LEFT_HAND_RISE);
             }
             // double hand
             if (rightHandRiseValide && leftHandRiseValide)
