@@ -38,7 +38,8 @@ public class GameManager : MonoBehaviour {
 	[SerializeField]
 	public Texture textureRightHandUp;
 
-
+	private SkeletonWrapper sw;
+	private HandInputManager him;
 
 	public int Score {
 		get {
@@ -93,6 +94,9 @@ public class GameManager : MonoBehaviour {
 		}
 		
 		Instance = this;
+
+		sw = SkeletonWrapper.Instance;
+		him = HandInputManager.Instance;
 
 		gameMode = GlobalVariables.gameMode;
 		TargetScore = targetScore;
