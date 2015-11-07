@@ -204,10 +204,6 @@ public class GameManager : MonoBehaviour {
 
 
 	void OnHandMotion(object sender, HandMotionDetectedEventArgs args) {
-		if(gameMode != GameMode.LimitedTime) {
-			return;
-		}
-
 		int deltaScore = 0;
 
 		switch(args.motion) {
@@ -227,8 +223,11 @@ public class GameManager : MonoBehaviour {
 			break;
 		}
 
-		this.score += deltaScore;
-		UpdateScoreText ();
+        if (gameMode != GameMode.LimitedTime) {
+            this.score += deltaScore;
+            UpdateScoreText();
+        }
+
 	}
 
 
