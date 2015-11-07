@@ -3,6 +3,8 @@ using System.Collections;
 
 public class ApplicationManager : MonoBehaviour {
 
+
+
 	public void Quit () {
 		#if UNITY_EDITOR
 		UnityEditor.EditorApplication.isPlaying = false;
@@ -11,11 +13,13 @@ public class ApplicationManager : MonoBehaviour {
 		#endif
 	}
 
-	public void OnHeadTrackingClicked() {
-		Application.LoadLevel("HeadTracking");
+	public void OnLimitedTimeClicked() {
+		GlobalVariables.gameMode = GameMode.LimitedTime;
+		Application.LoadLevel("Game");
 	}
 
-	public void OnGameClicked() {
+	public void OnLimitedLifeClicked() {
+		GlobalVariables.gameMode = GameMode.LimitedLife;
 		Application.LoadLevel("Game");
 	}
 }

@@ -5,7 +5,6 @@ using System.Collections;
 
 public class GameManager : MonoBehaviour {
 
-	[SerializeField]
 	private GameMode gameMode = GameMode.LimitedTime;
 
 	[SerializeField]
@@ -59,7 +58,7 @@ public class GameManager : MonoBehaviour {
 		}
 	}
 
-	public GameMode GetGameMode {
+	public GameMode GameMode {
 		get {
 			return this.gameMode;
 		}
@@ -94,7 +93,8 @@ public class GameManager : MonoBehaviour {
 		}
 		
 		Instance = this;
-		
+
+		gameMode = GlobalVariables.gameMode;
 		TargetScore = targetScore;
 		TargetDamage = targetDamage;
 
@@ -258,7 +258,6 @@ public class GameManager : MonoBehaviour {
 
 		// show final dialog
 		if (gameObject.GetComponent<FinalDialog> () == null) {
-			Debug.Log("FINAL DIALOG");
 			gameObject.AddComponent<FinalDialog> ();
 		}
 	}

@@ -18,7 +18,7 @@ public class FinalDialog : MonoBehaviour {
 	void ShowFinalDialog(int windowID) {
 
 		string text = "";
-		switch(GameManager.Instance.GetGameMode) {
+		switch(GameManager.Instance.GameMode) {
 		case GameMode.LimitedLife :
 			text = "Time passed : " + GameManager.Instance.TimePassed.ToString("F1") + " s";
 			break;
