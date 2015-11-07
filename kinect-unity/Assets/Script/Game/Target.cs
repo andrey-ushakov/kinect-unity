@@ -9,7 +9,7 @@ public class Target : MonoBehaviour {
 	private TargetType type;
 	private Vector3 direction;
 	private int score;
-	private float damage;
+	private int damage;
 
 	public static event TargetPlayerCollisionHandler targetPlayerCollision;
 
@@ -41,7 +41,7 @@ public class Target : MonoBehaviour {
 		}
 	}
 
-	public float Damage {
+	public int Damage {
 		get {
 			return this.damage;
 		}
@@ -61,8 +61,8 @@ public class Target : MonoBehaviour {
 
 	private void Awake() {
 		this.direction = new Vector3 (0, 0, 0);
-		this.score = 0;
-		this.damage = 0f;
+		this.score = 1;
+		this.damage = 1;
 	}
 
 	private void Update() {

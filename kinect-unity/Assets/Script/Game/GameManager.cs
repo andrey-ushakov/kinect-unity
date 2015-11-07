@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System;
 using System.Collections;
 
@@ -13,15 +14,28 @@ public class GameManager : MonoBehaviour {
 	private float timeCounter = 0;
 	
 	[SerializeField]
-	private float targetDamage = 2f;
+	private int targetDamage = 1;
 	
 	[SerializeField]
-	private int targetScore = 4;
+	private int targetScore = 1;
 
 	[SerializeField]
-	private float life = 20f;
+	private int life = 5;
 
 	private int score = 0;
+
+	// LimitedTime
+	[SerializeField]
+	private Text scoreText;
+	[SerializeField]
+	private Text timeLeftText;
+
+	// LimitedLife
+	[SerializeField]
+	private Text timePassedText;
+	[SerializeField]
+	private Text lifesText;
+
 
 	[SerializeField]
 	private float rateOfTargetSpawn = 0.2f;
@@ -35,7 +49,7 @@ public class GameManager : MonoBehaviour {
 
 	public static int TargetScore;
 
-	public static float TargetDamage;
+	public static int TargetDamage;
 
 
 
@@ -49,6 +63,33 @@ public class GameManager : MonoBehaviour {
 		
 		TargetScore = targetScore;
 		TargetDamage = targetDamage;
+
+		SetupUI ();
+	}
+
+
+	void SetupUI() {
+		switch(gameMode) {
+		case GameMode.LimitedTime:
+			// show/hide text
+			scoreText.gameObject.SetActive(true);
+			timeLeftText.gameObject.SetActive(true);
+			timePassedText.gameObject.SetActive(false);
+			lifesText.gameObject.SetActive(false);
+			// display score
+			UpdateScoreText ();
+			break;
+			
+		case GameMode.LimitedLife:
+			// show/hide text
+			scoreText.gameObject.SetActive(false);
+			timeLeftText.gameObject.SetActive(false);
+			timePassedText.gameObject.SetActive(true);
+			lifesText.gameObject.SetActive(true);
+			// display lifes
+			UpdateLifesText ();
+			break;
+		}
 	}
 
 
@@ -59,15 +100,18 @@ public class GameManager : MonoBehaviour {
 		RandomSpawn ();
 
 		switch(gameMode) {
-			case GameMode.LimitedTime:
-				timeLeft -= Time.deltaTime;
-				if (timeLeft <= 0) {
-					// TODO end game
-				}
-				break;
-			case GameMode.LimitedLife:
-				timeCounter += Time.deltaTime;
-				break;
+		case GameMode.LimitedTime:
+			timeLeft -= Time.deltaTime;
+			UpdateTimeLeftText();
+			if (timeLeft <= 0) {
+				timeLeft = 0;
+				// TODO end game
+			}
+			break;
+		case GameMode.LimitedLife:
+			timeCounter += Time.deltaTime;
+			UpdateTimePassedText();
+			break;
 		}
 	}
 
@@ -108,13 +152,19 @@ public class GameManager : MonoBehaviour {
 
 		if (gameMode == GameMode.LimitedLife) {
 			life -= target.Damage;
+			UpdateLifesText ();
 			if (life <= 0) {
+				life = 0;
 				// TODO end game
 			}
 		}
 	}
 
 	void OnHandMotion(object sender, HandMotionDetectedEventArgs args) {
+		if(gameMode != GameMode.LimitedTime) {
+			return;
+		}
+
 		int deltaScore = 0;
 
 		switch(args.motion) {
@@ -130,5 +180,23 @@ public class GameManager : MonoBehaviour {
 		}
 
 		this.score += deltaScore;
+		UpdateScoreText ();
+	}
+
+
+	void UpdateScoreText() {
+		scoreText.text = "Score: " + score.ToString ();
+	}
+	
+	void UpdateTimeLeftText() {
+		timeLeftText.text = "Time Left: " + timeLeft.ToString ("F1") + " s.";
+	}
+	
+	void UpdateTimePassedText() {
+		timePassedText.text = "Time Passed: " + timeCounter.ToString ("F1") + " s.";
+	}
+	
+	void UpdateLifesText() {
+		lifesText.text = "Lifes: " + life.ToString ();
 	}
 }

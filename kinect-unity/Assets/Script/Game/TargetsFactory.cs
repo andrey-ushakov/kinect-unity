@@ -7,7 +7,7 @@ public class TargetsFactory : MonoBehaviour {
 	public Dictionary<TargetType, Queue<Target>> availableTargetsByType = new Dictionary<TargetType, Queue<Target>>();
 
 	private int targetCount = 0;
-	
+
 	[SerializeField]
 	private float setSpeed = 7f;
 	private static float speed = 7f;
@@ -113,7 +113,6 @@ public class TargetsFactory : MonoBehaviour {
 		if (target == null) {
 			// Instantiate a new target.
 			target = InstantiateTarget(targetType);
-			//Debug.Log("Number of targets instantiated = " + TargetsFactory.Instance.targetCount + "\n" + targetType.ToString());
 		}
 
 
@@ -128,8 +127,6 @@ public class TargetsFactory : MonoBehaviour {
 		Queue<Target> availableTargets = TargetsFactory.Instance.availableTargetsByType[target.Type];
 		target.gameObject.SetActive(false);
 		availableTargets.Enqueue(target);
-
-		Debug.Log (availableTargets.Count);
 	}
 
 
