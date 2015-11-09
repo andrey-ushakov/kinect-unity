@@ -7,9 +7,14 @@ public delegate void TargetPlayerCollisionHandler(object sender, EventArgs e);
 public class Target : MonoBehaviour {
 
 	private TargetType type;
-	private Vector3 direction;
-	private int score;
-	private int damage;
+	private Vector3 direction	= new Vector3 (0, 0, 0);
+	private int score			= 1;
+	private int damage			= 1;
+
+	private int bonusScore		= 0;
+	private float bonusTime		= 0f;
+	private int bonusLife		= 0;
+
 
 	public static event TargetPlayerCollisionHandler targetPlayerCollision;
 
@@ -59,11 +64,34 @@ public class Target : MonoBehaviour {
 		}
 	}
 
-	private void Awake() {
-		this.direction = new Vector3 (0, 0, 0);
-		this.score = 1;
-		this.damage = 1;
+	public int BonusScore {
+		get {
+			return this.bonusScore;
+		}
+		set {
+			this.bonusScore = value;
+		}
 	}
+	
+	public float BonusTime {
+		get {
+			return this.bonusTime;
+		}
+		set {
+			this.bonusTime = value;
+		}
+	}
+	
+	public int BonusLife {
+		get {
+			return this.bonusLife;
+		}
+		set {
+			this.bonusLife = value;
+		}
+	}
+
+
 
 	private void Update() {
 		this.UpdatePosition();

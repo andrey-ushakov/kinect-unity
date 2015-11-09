@@ -15,11 +15,17 @@ public class TargetsFactory : MonoBehaviour {
 	[SerializeField]
 	private GameObject targetPrefab;
 	[SerializeField]
-	private int numberOfTopTargetsToPreinstantiate;
+	private GameObject targetBonusPrefab;
 	[SerializeField]
-	private int numberOfLeftTargetsToPreinstantiate;
+	private int numberOfTopTargetsToPreinstantiate			= 5;
 	[SerializeField]
-	private int numberOfRightTargetsToPreinstantiate;
+	private int numberOfLeftTargetsToPreinstantiate			= 5;
+	[SerializeField]
+	private int numberOfRightTargetsToPreinstantiate		= 5;
+	[SerializeField]
+	private int numberOfTopBonusTargetsToPreinstantiate		= 5;
+	[SerializeField]
+	private int numberOfBottomBonusTargetsToPreinstantiate	= 5;
 
 	private static TargetsFactory Instance {
 		get;
@@ -49,9 +55,11 @@ public class TargetsFactory : MonoBehaviour {
 			return;
 		}
 
-		PreinstantiateTargets(TargetType.TopTarget, 	this.numberOfTopTargetsToPreinstantiate);
-		PreinstantiateTargets(TargetType.LeftTarget, 	this.numberOfLeftTargetsToPreinstantiate);
-		PreinstantiateTargets(TargetType.RightTarget, 	this.numberOfRightTargetsToPreinstantiate);
+		PreinstantiateTargets(TargetType.TopTarget, 		this.numberOfTopTargetsToPreinstantiate);
+		PreinstantiateTargets(TargetType.LeftTarget, 		this.numberOfLeftTargetsToPreinstantiate);
+		PreinstantiateTargets(TargetType.RightTarget, 		this.numberOfRightTargetsToPreinstantiate);
+		PreinstantiateTargets(TargetType.TopBonusTarget, 	this.numberOfTopBonusTargetsToPreinstantiate);
+		PreinstantiateTargets(TargetType.BottomBonusTarget, this.numberOfBottomBonusTargetsToPreinstantiate);
 	}
 
 
@@ -71,17 +79,24 @@ public class TargetsFactory : MonoBehaviour {
 
 	private static Target InstantiateTarget(TargetType targetType) {
 		GameObject gameObject = null;
-		
-		gameObject = (GameObject) GameObject.Instantiate(Instance.targetPrefab);
+
+		if (targetType == TargetType.BottomBonusTarget || targetType == TargetType.TopBonusTarget) {
+			gameObject = (GameObject)GameObject.Instantiate (Instance.targetBonusPrefab);
+		} else {
+			gameObject = (GameObject)GameObject.Instantiate (Instance.targetPrefab);
+		}
 		
 		gameObject.SetActive(false);
 		gameObject.tag = targetType.ToString();
 		gameObject.transform.parent = TargetsFactory.Instance.gameObject.transform;
 		Target target = gameObject.GetComponent<Target>();
 
-		target.Type		= targetType;
-		target.Score 	= GameManager.TargetScore;
-		target.Damage 	= GameManager.TargetDamage;
+		target.Type			= targetType;
+		target.Score 		= GameManager.TargetScore;
+		target.Damage 		= GameManager.TargetDamage;
+		target.BonusScore 	= GameManager.TargetBonusScore;
+		target.BonusTime 	= GameManager.TargetBonusTime;
+		target.BonusLife 	= GameManager.TargetBonusLife;
 
 		switch (targetType) {
 		case TargetType.TopTarget:
@@ -94,6 +109,14 @@ public class TargetsFactory : MonoBehaviour {
 			
 		case TargetType.RightTarget:
 			target.Direction = new Vector3(6, 0, -7) * speed;
+			break;
+			
+		case TargetType.TopBonusTarget:
+			target.Direction = new Vector3(0, 3, -7) * speed;
+			break;
+			
+		case TargetType.BottomBonusTarget:
+			target.Direction = new Vector3(0, -3, -7) * speed;
 			break;
 		}
 
@@ -143,6 +166,23 @@ public class TargetsFactory : MonoBehaviour {
 		}
 
 		return score;
+	}
+
+	public static Bonus ReleaseAllBonusTargetsByType(TargetType targetType) {
+		Bonus bonus = new Bonus ();
+		GameObject[] gameObjectsToRelease = GameObject.FindGameObjectsWithTag (targetType.ToString());
+
+		foreach(GameObject gameObject in gameObjectsToRelease) {
+			// add score
+			Target target = gameObject.GetComponent<Target>();
+			bonus.Score += target.BonusScore;
+			bonus.Time += target.BonusTime;
+			bonus.Life += target.BonusLife;
+			// release
+			TargetsFactory.ReleaseTarget(target);
+		}
+
+		return bonus;
 	}
 
 	public static void ReleaseAllTargets() {

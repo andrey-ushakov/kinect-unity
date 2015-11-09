@@ -42,11 +42,11 @@ public class GameManager : MonoBehaviour {
 	// Both modes variables
 	[SerializeField]
 	private int targetDamage = 1;
-	[SerializeField]
-	private float rateOfTargetSpawn = 1f;
 	// Final dialog icon
 	[SerializeField]
 	public Texture textureRightHandUp;
+	[SerializeField]
+	private float rateOfTargetSpawn = 1f;
 
 	// Bonus objects
 	[SerializeField]
@@ -63,11 +63,15 @@ public class GameManager : MonoBehaviour {
 	// Internal variables
 	private bool isFinished = false;
 	private double lastTargetSpawnTime;
+	private double lastBonusTargetSpawnTime;
 	
 
 	// Class properties
 	public static int TargetScore;
 	public static int TargetDamage;
+	public static int TargetBonusScore;
+	public static float TargetBonusTime;
+	public static int TargetBonusLife;
 	
 	public int Score {
 		get {
@@ -120,6 +124,9 @@ public class GameManager : MonoBehaviour {
 		gameMode = GlobalVariables.gameMode;
 		TargetScore = targetScore;
 		TargetDamage = targetDamage;
+		TargetBonusScore = bonusTargetScore;
+		TargetBonusTime = bonusTargetTime;
+		TargetBonusLife = bonusTargetLife;
 
 		SetupUI ();
 	}
@@ -158,7 +165,8 @@ public class GameManager : MonoBehaviour {
 			return;
 		}
 
-		RandomSpawn ();
+		TargetSpawn ();
+		BonusTargetSpawn ();
 
 		switch(gameMode) {
 		case GameMode.LimitedTime:
@@ -177,17 +185,17 @@ public class GameManager : MonoBehaviour {
 	}
 
 
-	private void RandomSpawn() {
+	private void TargetSpawn() {
 		if (this.rateOfTargetSpawn <= 0f) {
 			return;
 		}
 		
 		float durationBetweenTwoTargetsSpawn = 1f / this.rateOfTargetSpawn;
-
+		
 		if (Time.time < this.lastTargetSpawnTime + durationBetweenTwoTargetsSpawn) {
 			return;
 		}
-
+		
 		// chose random target type
 		System.Array values = new int[3];
 		values.SetValue(TargetType.TopTarget, 0);
@@ -196,19 +204,43 @@ public class GameManager : MonoBehaviour {
 		TargetType targetType = (TargetType)values.GetValue(UnityEngine.Random.Range(0, values.Length));
 		// spawn !
 		TargetsFactory.GetTarget(targetType);
-
+		
 		this.lastTargetSpawnTime = Time.time;
+	}
+
+	private void BonusTargetSpawn() {
+		if (this.rateOfBonusTargetSpawn <= 0f) {
+			return;
+		}
+		
+		float durationBetweenTwoTargetsSpawn = 1f / this.rateOfBonusTargetSpawn;
+		
+		if (Time.time < this.lastBonusTargetSpawnTime + durationBetweenTwoTargetsSpawn) {
+			return;
+		}
+		
+		// chose random target type
+		System.Array values = new int[2];
+		values.SetValue(TargetType.TopBonusTarget, 0);
+		values.SetValue(TargetType.BottomBonusTarget, 1);
+		TargetType targetType = (TargetType)values.GetValue(UnityEngine.Random.Range(0, values.Length));
+		// spawn !
+		TargetsFactory.GetTarget(targetType);
+		
+		this.lastBonusTargetSpawnTime = Time.time;
 	}
 
 
 	void OnEnable() {
 		Target.targetPlayerCollision += OnTargetPlayerCollision;
 		HandInputManager.handMotionDetected += OnHandMotion;
+		BodyInputManager.bodyMotionDetected += OnBodyMotion;
 	}
 	
 	void OnDisable() {
 		Target.targetPlayerCollision -= OnTargetPlayerCollision;
 		HandInputManager.handMotionDetected -= OnHandMotion;
+		BodyInputManager.bodyMotionDetected -= OnBodyMotion;
 	}
 
 	void OnTargetPlayerCollision(object sender, EventArgs e) {
@@ -249,7 +281,28 @@ public class GameManager : MonoBehaviour {
             this.score += deltaScore;
             UpdateScoreText();
         }
+	}
 
+
+	void OnBodyMotion(object sender, BodyMotionDetectedEventArgs args) {
+		Bonus bonus = new Bonus();
+		switch(args.motion) {
+		case BodyMotion.JUMP:
+			bonus = TargetsFactory.ReleaseAllBonusTargetsByType(TargetType.TopBonusTarget);
+			break;
+		case BodyMotion.SUPER_JUMP:
+			bonus = TargetsFactory.ReleaseAllBonusTargetsByType(TargetType.BottomBonusTarget);
+			break;
+		}
+
+		if (gameMode == GameMode.LimitedTime) {
+			this.score += bonus.Score;
+			this.timeLeft += bonus.Time;
+			UpdateScoreText();
+		} else if (gameMode == GameMode.LimitedLife) {
+			this.life += bonus.Life;
+			UpdateLifesText();
+		}
 	}
 
 
