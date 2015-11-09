@@ -35,8 +35,8 @@ public class BodyInputManager : MonoBehaviour {
 	private Vector3 leftFootPosPre = Vector3.zero;
 	private Vector3 spinePosPre = Vector3.zero;
 
-	public float detectMotionDuration = 0.4f; 
-	public float detectMotionDistance = 0.2f;
+	public float detectMotionDuration = 0.5f; 
+	public float detectMotionDistance = 0.3f;
 
 	private Vector3 rightFootVelo;
 	private Vector3 leftFootVelo;
