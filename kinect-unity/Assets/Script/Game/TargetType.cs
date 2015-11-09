@@ -2,4 +2,6 @@
 	TopTarget,
 	LeftTarget,
 	RightTarget,
+	TopBonusTarget,
+	BottomBonusTarget,
 }

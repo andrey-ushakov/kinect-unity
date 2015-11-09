@@ -6,41 +6,69 @@ using System.Collections;
 public class GameManager : MonoBehaviour {
 
 	private GameMode gameMode = GameMode.LimitedTime;
-
-	[SerializeField]
-	private float timeLeft = 10f;
-
-	private float timeCounter = 0;
-	
-	[SerializeField]
-	private int targetDamage = 1;
-	
-	[SerializeField]
-	private int targetScore = 1;
-
-	[SerializeField]
-	private int life = 5;
-
-	private int score = 0;
-
-	// LimitedTime
-	[SerializeField]
-	private Text scoreText;
-	[SerializeField]
-	private Text timeLeftText;
-
-	// LimitedLife
-	[SerializeField]
-	private Text timePassedText;
-	[SerializeField]
-	private Text lifesText;
-
-	[SerializeField]
-	public Texture textureRightHandUp;
-
 	private SkeletonWrapper sw;
 	private HandInputManager him;
 
+	// LimitedTime mode variables
+	// Timer
+	[SerializeField]
+	private float timeLeft = 10f;
+	[SerializeField]
+	private int targetScore = 1;
+	// Score counter
+	private int score = 0;
+	// GUI text
+	[SerializeField]
+	private Text scoreText;
+	// GUI text
+	[SerializeField]
+	private Text timeLeftText;
+
+
+	// LimitedLife mode variables
+	// Life counter
+	[SerializeField]
+	private int life = 5;
+	// Time counter
+	private float timeCounter = 0;
+	// GUI text
+	[SerializeField]
+	private Text timePassedText;
+	// GUI text
+	[SerializeField]
+	private Text lifesText;
+
+
+	// Both modes variables
+	[SerializeField]
+	private int targetDamage = 1;
+	[SerializeField]
+	private float rateOfTargetSpawn = 1f;
+	// Final dialog icon
+	[SerializeField]
+	public Texture textureRightHandUp;
+
+	// Bonus objects
+	[SerializeField]
+	private float rateOfBonusTargetSpawn = 0.5f;
+	[SerializeField]
+	private int bonusTargetScore = 2;		// bonus score for LimitedTime mode
+	[SerializeField]
+	private float bonusTargetTime = 2f;		// bonus time for LimitedTime mode
+	[SerializeField]
+	private int bonusTargetLife = 1;		// bonus life for LimitedLife mode
+
+
+
+	// Internal variables
+	private bool isFinished = false;
+	private double lastTargetSpawnTime;
+	
+
+	// Class properties
+	public static int TargetScore;
+	public static int TargetDamage;
+	
 	public int Score {
 		get {
 			return this.score;
@@ -69,21 +97,12 @@ public class GameManager : MonoBehaviour {
 	}
 
 
-	[SerializeField]
-	private float rateOfTargetSpawn = 0.2f;
-
-	private double lastTargetSpawnTime;
 
 	public static GameManager Instance {
 		get;
 		private set;
 	}
 
-	public static int TargetScore;
-
-	public static int TargetDamage;
-
-	private bool isFinished = false;
 
 
 
@@ -170,7 +189,10 @@ public class GameManager : MonoBehaviour {
 		}
 
 		// chose random target type
-		System.Array values = TargetType.GetValues(typeof(TargetType));
+		System.Array values = new int[3];
+		values.SetValue(TargetType.TopTarget, 0);
+		values.SetValue(TargetType.LeftTarget, 1);
+		values.SetValue(TargetType.RightTarget, 2);
 		TargetType targetType = (TargetType)values.GetValue(UnityEngine.Random.Range(0, values.Length));
 		// spawn !
 		TargetsFactory.GetTarget(targetType);
