@@ -8,6 +8,7 @@ public class GameManager : MonoBehaviour {
 	private GameMode gameMode = GameMode.LimitedTime;
 	private SkeletonWrapper sw;
 	private HandInputManager him;
+	private BodyInputManager bim;
 
 	// LimitedTime mode variables
 	// Timer
@@ -120,6 +121,7 @@ public class GameManager : MonoBehaviour {
 
 		sw = SkeletonWrapper.Instance;
 		him = HandInputManager.Instance;
+		bim = BodyInputManager.Instance;
 
 		gameMode = GlobalVariables.gameMode;
 		TargetScore = targetScore;
